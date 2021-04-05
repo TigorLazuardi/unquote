@@ -8,7 +8,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/nolleh/caption_json_formatter"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -27,7 +26,9 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	log.SetFormatter(&caption_json_formatter.Formatter{})
+	log.SetFormatter(&log.TextFormatter{
+		QuoteEmptyFields: true,
+	})
 	log.SetLevel(ll)
 }
 
@@ -61,6 +62,7 @@ func work(s string) {
 }
 
 func marshaller(v interface{}) interface{} {
+	log.Debug(v)
 	if s, ok := v.(map[string]interface{}); ok {
 		e, _ := json.Marshal(s)
 		return string(e)
@@ -113,8 +115,10 @@ func handleString(s string) interface{} {
 	x, err := strconv.Unquote(s)
 	// Not Escaped Values
 	if err != nil {
-		log.Debug(err)
-		return s
+		log.WithFields(map[string]interface{}{
+			"value": s,
+		}).Debug(err.Error())
+		x = s
 	}
 
 	m := make(map[string]interface{})
