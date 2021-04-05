@@ -2,6 +2,12 @@
 
 Simple program to unquote a string from stdin or arguments. Designed for JSON use.
 
+# Installation
+
+```sh
+go get github.com/TigorLazuardi/unquote
+```
+
 # Usage Example
 
 ## From pipe/stdin:
